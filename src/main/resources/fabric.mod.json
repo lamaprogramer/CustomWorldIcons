@@ -5,13 +5,12 @@
 
   "name": "Custom World Icons",
   "description": "Allows you to easily add custom icons to your world upon creation.",
-  "accessWidener" : "customworldicons.accesswidener",
   "authors": [
     "Iamaprogrammer"
   ],
   "contact": {
-    "homepage": "https://github.com/lamaprogramer/ReimaginedMenus",
-    "sources": "https://github.com/lamaprogramer/ReimaginedMenus"
+    "homepage": "https://github.com/lamaprogramer/CustomWorldIcons",
+    "sources": "https://github.com/lamaprogramer/CustomWorldIcons"
   },
 
   "license": "MIT",
@@ -30,7 +29,7 @@
 
   "depends": {
     "fabricloader": ">=0.12.12",
-    "minecraft": ">=1.19 <=1.19.3",
+    "minecraft": "1.19.4",
     "java": ">=17"
   },
   "suggests": {

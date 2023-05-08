@@ -1,10 +1,7 @@
 package net.iamaprogrammer.customworldicons.gui.widgets;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.iamaprogrammer.customworldicons.gui.screen.WorldIconScreen;
-import net.iamaprogrammer.customworldicons.util.ButtonStorage;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.MultilineText;
 import net.minecraft.client.gui.DrawableHelper;
@@ -26,16 +23,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Objects;
 
-@Environment(value= EnvType.CLIENT)
+
 public class WorldIconListWidget extends AlwaysSelectedEntryListWidget<net.iamaprogrammer.customworldicons.gui.widgets.WorldIconListWidget.WorldIconEntry> {
     static final Identifier RESOURCE_PACKS_TEXTURE = new Identifier("textures/gui/resource_packs.png");
-
-    public static int SELECTED_CHILD = -1;
-
-    public static List<WorldIconEntry> CHILDREN;
     private final Text title;
     private final WorldIconScreen screen;
 
@@ -46,23 +38,12 @@ public class WorldIconListWidget extends AlwaysSelectedEntryListWidget<net.iamap
         this.centerListVertically = false;
         Objects.requireNonNull(client.textRenderer);
         this.setRenderHeader(true, (int)(9.0f * 1.5f));
-        CHILDREN = this.children();
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        super.render(matrices, mouseX, mouseY, delta);
-    }
-
-
-    private void renderHeader(MatrixStack matrices, int x, int y) {
+    protected void renderHeader(MatrixStack matrices, int x, int y) {
         MutableText text = Text.empty().append(this.title).formatted(Formatting.UNDERLINE, Formatting.BOLD);
         this.client.textRenderer.draw(matrices, text, (float)(x + this.width / 2 - this.client.textRenderer.getWidth(text) / 2), (float)Math.min(this.top + 3, y), 0xFFFFFF);
-    }
-
-    @Override
-    protected void renderEntry(MatrixStack matrices, int mouseX, int mouseY, float delta, int index, int x, int y, int entryWidth, int entryHeight) {
-        super.renderEntry(matrices, mouseX, mouseY, delta, index, x, y, entryWidth, entryHeight);
     }
 
     @Override
@@ -73,11 +54,6 @@ public class WorldIconListWidget extends AlwaysSelectedEntryListWidget<net.iamap
     @Override
     protected int getScrollbarPositionX() {
         return this.right - 6;
-    }
-
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
@@ -92,8 +68,8 @@ public class WorldIconListWidget extends AlwaysSelectedEntryListWidget<net.iamap
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    @Environment(value=EnvType.CLIENT)
-    public static class WorldIconEntry extends AlwaysSelectedEntryListWidget.Entry<net.iamaprogrammer.customworldicons.gui.widgets.WorldIconListWidget.WorldIconEntry> {
+
+    public static class WorldIconEntry extends Entry<net.iamaprogrammer.customworldicons.gui.widgets.WorldIconListWidget.WorldIconEntry> {
         private final Path worldIconsFolder;
         private static final String ELLIPSIS = "...";
         private final net.iamaprogrammer.customworldicons.gui.widgets.WorldIconListWidget widget;
@@ -104,8 +80,6 @@ public class WorldIconListWidget extends AlwaysSelectedEntryListWidget<net.iamap
         private final String fullPath;
         private final double fileSize;
         private final boolean isToLarge;
-
-        private boolean selected;
 
 
         public WorldIconEntry(MinecraftClient client, net.iamaprogrammer.customworldicons.gui.widgets.WorldIconListWidget widget, File path) throws IOException {
@@ -138,13 +112,8 @@ public class WorldIconListWidget extends AlwaysSelectedEntryListWidget<net.iamap
             return Text.translatable("narrator.select", this.displayName);
         }
 
-
         @Override
         public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-            if (WorldIconListWidget.CHILDREN.indexOf(this) == WorldIconListWidget.SELECTED_CHILD) {
-                DrawableHelper.fill(matrices, x - 1, y - 1, x + entryWidth - 9, y + entryHeight + 1, -16777216);
-            }
-
             InputStream inputStream = null;
             NativeImageBackedTexture texture = null;
             if (!this.isToLarge) {
@@ -169,7 +138,6 @@ public class WorldIconListWidget extends AlwaysSelectedEntryListWidget<net.iamap
             if (texture != null) {
                 texture.close();
             }
-
             OrderedText orderedText = this.displayName;
             MultilineText multilineText = this.description;
             if (this.isToLarge) {
@@ -194,15 +162,12 @@ public class WorldIconListWidget extends AlwaysSelectedEntryListWidget<net.iamap
 
         @Override
         public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            super.mouseClicked(mouseX, mouseY, button);
             if (button != 0) {
                 return false;
             }
             if (this.isSelectable()) {
-                //this.widget.screen.clearSelection();
-                //this.selected = true;
-                WorldIconListWidget.SELECTED_CHILD = WorldIconListWidget.CHILDREN.indexOf(this);
-                WorldIconScreen.SELECTED_ICON = WorldIconListWidget.CHILDREN.get(WorldIconListWidget.SELECTED_CHILD).fullPath;
+                this.widget.screen.clearSelection();
+                WorldIconScreen.SELECTED_ICON = this.fullPath;
                 return true;
             }
             return false;

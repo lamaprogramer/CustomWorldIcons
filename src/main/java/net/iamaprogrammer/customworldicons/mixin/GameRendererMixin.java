@@ -15,8 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -30,6 +28,10 @@ public abstract class GameRendererMixin {
 
     @Shadow private long lastWorldIconUpdate;
 
+    @Shadow protected abstract void updateWorldIcon(Path path);
+
+    @Shadow protected abstract void updateWorldIcon();
+
     @Shadow @Final private static Logger LOGGER;
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;updateWorldIcon()V"))
@@ -39,33 +41,33 @@ public abstract class GameRendererMixin {
     }
 
     public void updateIcon(String iconPath, boolean isCustom) {
-
-        if (!this.hasWorldIcon && this.client.isInSingleplayer()) {
-            long l = Util.getMeasuringTimeMs();
-            if (l - this.lastWorldIconUpdate >= 1000L) {
-                this.lastWorldIconUpdate = l;
-                IntegratedServer integratedServer = this.client.getServer();
-                if (integratedServer != null && !integratedServer.isStopped()) {
-                    integratedServer.getIconFile().ifPresent((path) -> {
-                        if (Files.isRegularFile(path, new LinkOption[0])) {
-                            this.hasWorldIcon = true;
-                        } else {
-                            imagePathToIcon(iconPath, path, isCustom);
-                        }
-
-                    });
-                }
-            }
+        if (this.hasWorldIcon || !this.client.isInSingleplayer()) {
+            return;
         }
+        long l = Util.getMeasuringTimeMs();
+        if (l - this.lastWorldIconUpdate < 1000L) {
+            return;
+        }
+        this.lastWorldIconUpdate = l;
+        IntegratedServer integratedServer = this.client.getServer();
+        if (integratedServer == null || integratedServer.isStopped()) {
+            return;
+        }
+        integratedServer.getIconFile().ifPresent(path -> {
+            if (Files.isRegularFile(path, new LinkOption[0])) {
+                this.hasWorldIcon = true;
+            } else {
+                imagePathToIcon(iconPath, path, isCustom);
+            }
+        });
     }
 
     private void imagePathToIcon(String path, Path destination, boolean isCustom) {
         try {
-            NativeImage nativeImage;
+            NativeImage nativeImage = null;
             if (isCustom) {
-                InputStream s = Files.newInputStream(Paths.get(path));
-                nativeImage = NativeImage.read(s);
-                s.close();
+                byte[] imageData = Files.readAllBytes(Paths.get(path));
+                nativeImage = NativeImage.read(imageData);
                 genImage(nativeImage, destination);
             } else {
                 if (this.client.worldRenderer.getCompletedChunkCount() > 10 && this.client.worldRenderer.isTerrainRenderComplete()) {
@@ -74,7 +76,7 @@ public abstract class GameRendererMixin {
                 }
             }
 
-        } catch (Exception iOException) {
+        } catch (IOException iOException) {
             LOGGER.warn("Couldn't save auto screenshot", iOException);
         }
     }
@@ -92,25 +94,13 @@ public abstract class GameRendererMixin {
                 l = (j - i) / 2;
                 j = i;
             }
-            try {
-                NativeImage nativeImage2 = new NativeImage(256, 256, false);
-                try {
-                    if (nativeImage.getWidth() > 256 || nativeImage.getHeight() > 256) {
-                        nativeImage.resizeSubRectTo(k, l, i, j, nativeImage2);
-                        nativeImage2.writeTo(destination);
-                    } else {
-                        nativeImage.writeTo(destination);
-                    }
-                } catch (Throwable var15) {
-                    try {
-                        nativeImage2.close();
-                    } catch (Throwable var14) {
-                        var15.addSuppressed(var14);
-                    }
-
-                    throw var15;
+            try (NativeImage nativeImage2 = new NativeImage(256, 256, false);){
+                if (nativeImage.getWidth() > 256 || nativeImage.getHeight() > 256) {
+                    nativeImage.resizeSubRectTo(k, l, i, j, nativeImage2);
+                    nativeImage2.writeTo(destination);
+                } else {
+                    nativeImage.writeTo(destination);
                 }
-                nativeImage2.close();
             } catch (IOException iOException) {
                 LOGGER.warn("Couldn't save auto screenshot", iOException);
             } finally {

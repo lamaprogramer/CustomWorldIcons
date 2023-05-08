@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(WorldListWidget.WorldEntry.class)
 public class WorldListWidgetMixin {
 
-    @Redirect(method = "getIconTexture", at = @At(value = "INVOKE", target = "Lorg/apache/commons/lang3/Validate;validState(ZLjava/lang/String;[Ljava/lang/Object;)V"), allow = 2)
-    private void injected(boolean expression, String message, Object[] values) {
+    @Redirect(method = "getIconTexture", at = @At(value = "INVOKE", target = "Lcom/google/common/base/Preconditions;checkState(ZLjava/lang/Object;)V"), allow = 2)
+    private void injected(boolean expression, Object errorMessage) {
     }
 }

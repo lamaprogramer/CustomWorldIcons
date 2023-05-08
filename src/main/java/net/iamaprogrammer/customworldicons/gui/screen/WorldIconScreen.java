@@ -13,8 +13,6 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.screen.ScreenTexts;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -66,8 +64,6 @@ public class WorldIconScreen extends Screen {
     public void close() {
         this.client.setScreen(this.parent);
         this.closeDirectoryWatcher();
-        WorldIconListWidget.SELECTED_CHILD = -1;
-        WorldIconListWidget.CHILDREN = null;
     }
 
     private void closeDirectoryWatcher() {
@@ -159,15 +155,14 @@ public class WorldIconScreen extends Screen {
         this.updatePackLists();
         this.refreshTimeout = 1L;
         this.iconTextures.clear();
-        WorldIconListWidget.CHILDREN = this.availableIconsList.children();
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        this.renderBackgroundTexture(0);
+        this.renderBackgroundTexture(matrices);
         this.availableIconsList.render(matrices, mouseX, mouseY, delta);
-        net.iamaprogrammer.customworldicons.gui.screen.WorldIconScreen.drawCenteredTextWithShadow(matrices, this.textRenderer, this.title.asOrderedText(), this.width / 2, 8, 0xFFFFFF);
-        net.iamaprogrammer.customworldicons.gui.screen.WorldIconScreen.drawCenteredTextWithShadow(matrices, this.textRenderer, DROP_INFO.asOrderedText(), this.width / 2, 20, 0xFFFFFF);
+        net.iamaprogrammer.customworldicons.gui.screen.WorldIconScreen.drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 8, 0xFFFFFF);
+        net.iamaprogrammer.customworldicons.gui.screen.WorldIconScreen.drawCenteredTextWithShadow(matrices, this.textRenderer, DROP_INFO, this.width / 2, 20, 0xFFFFFF);
         super.render(matrices, mouseX, mouseY, delta);
     }
 
@@ -202,7 +197,7 @@ public class WorldIconScreen extends Screen {
                 this.refresh();
             }
             this.client.setScreen(this);
-        }, Text.translatable("pack.dropConfirm"), Text.literal(string)));
+        }, Text.translatable("world.create.icon.dropConfirm"), Text.literal(string)));
     }
 
     @Environment(value=EnvType.CLIENT)
