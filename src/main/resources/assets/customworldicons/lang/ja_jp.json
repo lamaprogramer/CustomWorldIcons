@@ -1,0 +1,8 @@
+{
+  "world.create.icon.filetoolarge": "%s KB は大きなサイズです！ 50 KB以下のファイルを選んでください。",
+  "world.create.icon.title": "ワールドのアイコン",
+  "world.create.icon.folderinfo": "(ここにアイコンのファイルを置いてください。)",
+  "world.create.icon.dropinfo": "このウィンドウにファイルをドラッグ＆ドロップすると、アイコンが追加されます。",
+  "world.create.icon.openfolder": "アイコンフォルダを開く",
+  "world.create.icon.dropConfirm": "マインクラフトに以下のアイコンを追加しますか？"
+}

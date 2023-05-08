@@ -1,0 +1,8 @@
+{
+  "world.create.icon.filetoolarge": "Текущий размер: %s КБ. Размер превышает 50 КБ.",
+  "world.create.icon.title": "Иконки",
+  "world.create.icon.folderinfo": "(Поместите сюда файлы иконок)",
+  "world.create.icon.dropinfo": "Перетащите файлы в это окно, чтобы добавить иконки",
+  "world.create.icon.openfolder": "Папка с иконками",
+  "world.create.icon.dropConfirm": "Добавить следующие иконки в Minecraft?"
+}
