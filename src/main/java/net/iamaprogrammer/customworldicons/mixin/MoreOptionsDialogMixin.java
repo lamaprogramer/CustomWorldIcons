@@ -27,11 +27,12 @@ public abstract class MoreOptionsDialogMixin {
 	@Inject(method = "init", at = @At("TAIL"), locals = LocalCapture.CAPTURE_FAILHARD)
 	public void inject(CreateWorldScreen parent, MinecraftClient client, TextRenderer textRenderer, CallbackInfo ci) {
 		int j = this.parentWidth / 2 + 5;
-		this.worldIconsButton = (ButtonWidget)parent.addDrawableChild(ButtonWidget.builder(Text.translatable("world.create.icon.title"), (button) -> {
+
+		this.worldIconsButton = (ButtonWidget)parent.addDrawableChild(new ButtonWidget(j, 151, 150, 20, Text.translatable("world.create.icon.title"), (button) -> {
 			Path p = Path.of(new File(client.runDirectory, "worldicons/").toURI());
 			client.setScreen(new WorldIconScreen(client, parent, p, Text.translatable("world.create.icon.title")));
 
-		}).dimensions(j, 151, 150, 20).build());
+		}));
 		this.worldIconsButton.visible = false;
 		ButtonStorage.addIcon = this.worldIconsButton;
 	}

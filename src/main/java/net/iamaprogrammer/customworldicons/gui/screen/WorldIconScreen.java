@@ -8,7 +8,6 @@ import net.iamaprogrammer.customworldicons.gui.widgets.WorldIconListWidget;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ConfirmScreen;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.toast.SystemToast;
 import net.minecraft.client.util.math.MatrixStack;
@@ -87,8 +86,9 @@ public class WorldIconScreen extends Screen {
         this.availableIconsList.setLeftPos((this.width - 200)/2);
         this.addSelectableChild(this.availableIconsList);
 
-        this.addDrawableChild(ButtonWidget.builder(Text.translatable("world.create.icon.openfolder"), button -> Util.getOperatingSystem().open(this.file.toUri())).dimensions(this.width / 2 - 154, this.height - 48, 150, 20).tooltip(Tooltip.of(FOLDER_INFO)).build());
-        this.doneButton = this.addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> this.close()).dimensions(this.width / 2 + 4, this.height - 48, 150, 20).build());
+        this.addDrawableChild(new ButtonWidget(this.width / 2 - 154, this.height - 48, 150, 20, Text.translatable("world.create.icon.openfolder"), (button) -> Util.getOperatingSystem().open(this.file.toUri())));
+        this.doneButton = this.addDrawableChild(new ButtonWidget(this.width / 2 + 4, this.height - 48, 150, 20, ScreenTexts.DONE, button -> this.close()));
+
         this.refresh();
     }
 
