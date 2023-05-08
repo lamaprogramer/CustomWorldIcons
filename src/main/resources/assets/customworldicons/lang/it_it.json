@@ -1,0 +1,8 @@
+// Translation By: https://github.com/SSUPII
+{
+  "world.create.icon.filetoolarge": "%s KB é troppo grande!! Per favore seleziona un file al di sotto di 50 KB.",
+  "world.create.icon.title": "Icone del Mondo",
+  "world.create.icon.folderinfo": "(Rilascia i tuoi file icona qui)",
+  "world.create.icon.dropinfo": "Trascina e rilascia i tuoi file in questa finestra per aggiungere icone",
+  "world.create.icon.openfolder": "Apri Cartella Icone"
+}

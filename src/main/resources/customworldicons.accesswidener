@@ -1,0 +1,3 @@
+accessWidener v1 named
+
+accessible method net/minecraft/client/gui/screen/world/CreateWorldScreen addDrawableChild (Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;

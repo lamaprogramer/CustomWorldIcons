@@ -1,0 +1,7 @@
+{
+  "world.create.icon.filetoolarge": "%s KB !! Bitte wähle eine Datei unter 50 KB.",
+  "world.create.icon.title": "Welticons",
+  "world.create.icon.folderinfo": "(Plaziere Icon Dateien hier)",
+  "world.create.icon.dropinfo": "Ziehe die Dateien um ein Icon hinzuzufügen",
+  "world.create.icon.openfolder": "Öffne Iconordner"
+}
