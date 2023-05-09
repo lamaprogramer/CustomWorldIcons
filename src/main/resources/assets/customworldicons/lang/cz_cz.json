@@ -1,0 +1,8 @@
+{
+  "world.create.icon.filetoolarge": "%s KB - moc velký soubor!! Prosím o zvol soubor pod 50 KB.",
+  "world.create.icon.title": "Ikony Světů",
+  "world.create.icon.folderinfo": "(Zde vlož soubor ikony)",
+  "world.create.icon.dropinfo": "Přetáhni soubor do toho okna pro přidání ikony",
+  "world.create.icon.openfolder": "Otevřít složku s ikony",
+  "world.create.icon.dropConfirm": "Chceš přidat následující ikony do Minecraftu?"
+}
