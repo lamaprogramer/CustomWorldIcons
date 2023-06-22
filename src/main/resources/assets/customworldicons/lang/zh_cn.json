@@ -1,0 +1,8 @@
+{
+  "world.create.icon.filetoolarge": "%s KB 太大了！！请选择一个小于 50 KB 的文件。",
+  "world.create.icon.title": "世界图标",
+  "world.create.icon.folderinfo": "(在此处放置图标文件）",
+  "world.create.icon.dropinfo": "把文件拖到这个窗口以添加图标",
+  "world.create.icon.openfolder": "打开图标文件夹",
+  "world.create.icon.dropConfirm": "你想要添加以下的图标到我的世界吗？"
+}
